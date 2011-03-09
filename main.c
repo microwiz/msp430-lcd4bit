@@ -20,10 +20,10 @@ Testbed: TI Launchpad
             |                 |    |-------|RW 
             |                 |    V       |   
             |                 |            |   
-            |             P1.0|------------|DB4
-            |             P1.1|------------|DB5
-            |             P1.2|------------|DB6
-            |             P1.3|------------|DB7
+            |             P1.4|------------|DB4
+            |             P1.5|------------|DB5
+            |             P1.6|------------|DB6
+            |             P1.7|------------|DB7
             |                 |            |
             |             P1.3|------------|EN
             |             P1.1|------------|RS
@@ -34,14 +34,17 @@ Testbed: TI Launchpad
 
 */
 
+// LCD connection definitions
 #define LCD_R_W_BIT 0x04	//probably not used in the code
 #define LCD_BF_FLAG 0x10 	//probably not used in the code
-#define LCD_MODE_BIT 0x02
-#define LCD_ENABLE_BIT 0x08
+#define LCD_MODE_BIT 0x02	//BIT1
+#define LCD_ENABLE_BIT 0x08	//BIT3
+
 #define LCD_CMD_MASK 0x0e
 #define LCD_DATA_MASK 0xf0
 #define LCD_PORT_OUT P1OUT
 #define LCD_PORT_DIR P1DIR
+
 
 void brief_pause( int delay )	{
 	while (!delay)	{
@@ -49,7 +52,7 @@ void brief_pause( int delay )	{
 	}
 }
 
-void lcd_putchar( uint16_t in )
+int putchar( uint16_t in )
 {
 	LCD_PORT_OUT= ( in & 0xf0 ) | LCD_MODE_BIT;
 	LCD_PORT_OUT|= LCD_ENABLE_BIT;
@@ -63,6 +66,7 @@ void lcd_putchar( uint16_t in )
 	nop( );
 	LCD_PORT_OUT= 0;
 	brief_pause( 200 );
+	return (0);
 }
 
 void lcd_command( uint16_t cmd )
@@ -130,10 +134,10 @@ void lcd_init( )
 
 int main (void)	{
 
-  lcd_putchar ('H');
-  lcd_putchar ('e');
-  lcd_putchar ('l');
-  lcd_putchar ('l');
-  lcd_putchar ('o');
+  putchar ('H');
+  putchar ('e');
+  putchar ('l');
+  putchar ('l');
+  putchar ('o');
   return (0);	//fake return to avoid warning
 }
